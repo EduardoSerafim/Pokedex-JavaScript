@@ -4,9 +4,18 @@ function convertPokeApiDetailToPokemon(pokemonDetail){
      const pokemon = new Pokemon()
      pokemon.name = pokemonDetail.name
      pokemon.number = pokemonDetail.id
-    
-    
+     
+     const status = pokemonDetail.stats.map((baseStat) => baseStat.base_stat)
+     const [hp, attack, defense] = status
 
+     pokemon.hp = hp
+     pokemon.attack = attack
+     pokemon.defense = defense
+
+     pokemon.height = pokemonDetail.height
+     pokemon.weight = pokemonDetail.weight
+
+     
      const types = pokemonDetail.types.map((typeSlot) => typeSlot.type.name)
      const [type] = types
 
@@ -20,6 +29,12 @@ function convertPokeApiDetailToPokemon(pokemonDetail){
 
 pokeApi.getPokemonDetail = (pokemon) =>{
     return fetch(pokemon.url).then((response) => response.json()) 
+            .then(convertPokeApiDetailToPokemon)
+}
+
+pokeApi.getPokemonInfo = (id) =>{
+    const url = `https://pokeapi.co/api/v2/pokemon/${id}`
+    return fetch(url).then((response) => response.json()) 
             .then(convertPokeApiDetailToPokemon)
 }
 
